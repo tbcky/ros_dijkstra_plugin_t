@@ -1,0 +1,8 @@
+
+<library path="lib/libplan_plugin">
+  <class name="plan_plugin/PlanPlugin" type="plan_plugin::PlanPlugin" base_class_type="nav_core::BaseGlobalPlanner">
+    <description>
+      A global planner plugin that creates service request to get a plan and forwards the response to the move_base global planner module.
+    </description>
+  </class>
+</library>

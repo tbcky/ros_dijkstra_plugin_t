@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="d_txt" name="dijkstra_d" type="dijkstra_d.py" output="screen"/> 
+</launch>

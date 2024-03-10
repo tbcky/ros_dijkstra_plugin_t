@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!-- Starts move_base and loads the proper config files -->
+
+<launch>
+  <!-- Specify the name of the sensor data and command topics (can be overridden on the command line) -->
+  <!-- If no laser data is provided the local and global planer will be unable to perform dynamic obstacle avoidance -->
+  <arg name="scan_topic" default="/scan"/>
+  <arg name="cmd_vel_topic" default="/cmd_vel"/>
+  <arg name="odom_topic" default="/odom"/>
+ 
+  <!--用于路径规划的全局规划器的插件，默认使用自定义插件 srv_client_plugin/SrvClientPlugin。-->
+  <!-- Alternative global planners, default is NavfnROS: -->
+  <arg name="base_global_planner" default="plan_plugin/PlanPlugin"/>
+  <!-- arg name="base_global_planner" default="carrot_planner/CarrotPlanner"/ -->
+  <!--arg name="base_global_planner" default="navfn/NavfnROS"/-->
+  <!-- arg name="base_global_planner" default="global_planner/GlobalPlanner"/ -->
+  <!--用于路径规划的局部规划器的插件，默认为 dwa_local_planner/DWAPlannerROS。-->
+  <arg name="base_local_planner" default="arips_local_planner/AripsPlannerROS"/>
+  <!-- Default local planner (default is trajectory rollout) -->
+  <!-- <arg name="base_local_planner" default="base_local_planner/TrajectoryPlannerROS"/> -->
+
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find dijkstraros)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find dijkstraros)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find dijkstraros)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find dijkstraros)/config/global_costmap_params.yaml" command="load" />
+<!--<rosparam file="$(find dijkstraros)/config/base_local_planner_params.yaml" command="load" /> -->
+    <rosparam file="$(find dijkstraros)/config/dwa_local_planner_params.yaml" command="load" />
+
+    <rosparam file="$(find dijkstraros)/config/move_base_params.yaml" command="load" />
+    <rosparam file="$(find dijkstraros)/config/global_planner_params.yaml" command="load" />
+    <rosparam file="$(find dijkstraros)/config/navfn_global_planner_params.yaml" command="load" />
+
+
+    <!--remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="scan" to="$(arg scan_topic)"/-->
+    
+    <!-- Override the plugin for the global planner to use with move_base -->
+    <param name="base_global_planner" value="$(arg base_global_planner)"/>
+    <param name="base_local_planner" value="$(arg base_local_planner)"/>  
+
+    
+    <!-- Override rate (Hz) at which move_base will be called -->
+    <!-- <param name="controller_frequency" type="double" value="3"/> -->
+    
+  </node>
+</launch>

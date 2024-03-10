@@ -3,5 +3,3 @@
 Implemented a global planning plugin for the dijkstra algorithm using C++and Python based on ROS              
 
 
-Uploading dijkstra.mp4…
-
